@@ -12,9 +12,15 @@ from openhands.tools.preset.planning import register_planning_tools
 
 
 tool_router = APIRouter(prefix="/tools", tags=["Tools"])
-register_default_tools(enable_browser=True)
-register_builtins_agents(enable_browser=True)
-register_gemini_tools(enable_browser=True)
+
+# MSK/Render low-memory profile:
+# The MSK code-editing flow uses terminal + file editor and does not require
+# BrowserTool at server boot. Importing the browser stack eagerly adds a large
+# memory spike on small Render instances and can cause the service to be killed
+# while the first conversation is starting.
+register_default_tools(enable_browser=False)
+register_builtins_agents(enable_browser=False)
+register_gemini_tools(enable_browser=False)
 register_planning_tools()
 
 
